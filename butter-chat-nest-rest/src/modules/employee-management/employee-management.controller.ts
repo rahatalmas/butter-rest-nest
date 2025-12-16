@@ -7,7 +7,7 @@ import { UpdateEmployeeManagementDto } from './dto/update-employee-management.dt
 export class EmployeeManagementController {
   constructor(private readonly employeeManagementService: EmployeeManagementService) {}
 
-  @Post()
+  @Post('add')
   create(@Body() createEmployeeManagementDto: CreateEmployeeManagementDto) {
     return this.employeeManagementService.create(createEmployeeManagementDto);
   }

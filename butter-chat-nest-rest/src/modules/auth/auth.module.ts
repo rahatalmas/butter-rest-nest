@@ -18,6 +18,5 @@ import { AuthDbSourceProvider } from './auth.provider';
   ],
   controllers: [AuthController],
   providers: [...AuthDbSourceProvider,AuthService,AuthRepo],
-  //exports: [AuthService]
 })
 export class AuthModule {}

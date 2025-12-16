@@ -7,7 +7,7 @@ export class Registry extends MetaData {
     id:string
     
     @Column()
-    business_name: string
+    businessName: string
 
     @Column({ type: "varchar", length: 20, unique: true, nullable: false })
     email: string
@@ -16,5 +16,5 @@ export class Registry extends MetaData {
     password: string
 
     @Column({nullable: false})
-    refresh_token: string
+    refreshToken: string
 }

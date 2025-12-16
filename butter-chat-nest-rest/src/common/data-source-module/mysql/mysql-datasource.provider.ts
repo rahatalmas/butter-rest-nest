@@ -1,6 +1,8 @@
 import { join } from 'path';
 import {DataSource} from 'typeorm';
 import { Registry } from '../../../modules/auth/entities/registry.entity';
+import { Department } from '../../../department/entities/department.entity';
+import { EmployeeManagement } from '../../../modules/employee-management/entities/employee-management.entity';
 
 export const MysqlDatabaseProvider = [
     {
@@ -14,7 +16,7 @@ export const MysqlDatabaseProvider = [
                 password:'',
                 database:'butter_chat',
                 entities:[
-                    Registry
+                    Registry,Department,EmployeeManagement
                 ],
                 // entities: [
                 //     join(__dirname, '..', '..', '..', 'modules', '**', '*.entity.{ts,js}')

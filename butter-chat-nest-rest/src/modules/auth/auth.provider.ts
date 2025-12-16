@@ -1,6 +1,5 @@
 import { DataSource } from "typeorm";
 import { Registry } from "./entities/registry.entity";
-import { Injectable } from "@nestjs/common";
 
 export const AuthDbSourceProvider = [
     {

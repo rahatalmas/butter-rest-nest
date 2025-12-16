@@ -18,7 +18,7 @@ export class AuthRepo {
 
   /**
    * Register a new user
-   */
+  */
   async storeNewUser(registerAuthDto: RegisterAuthDto) {
     const existingUser = await this.authRepository.findOne({
       where: { email: registerAuthDto.email },
@@ -34,24 +34,24 @@ export class AuthRepo {
     const hashedPassword = await bcrypt.hash(registerAuthDto.password, 10);
 
     const user = this.authRepository.create({
-      business_name: registerAuthDto.business_name,
+      businessName: registerAuthDto.businessName,
       email: registerAuthDto.email,
       password: hashedPassword,
     });
 
     const savedUser = await this.authRepository.save(user);
 
-    const payload = { sub: savedUser.id, business_name: savedUser.business_name };
-    const access_token = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
-    const refresh_token = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
+    const payload = { sub: savedUser.id, businessName: savedUser.businessName };
+    const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
+    const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
 
     return new ResponseInterface({
       message: 'Registration successful',
       status: 'success',
       data: {
-        user_id: savedUser.id,
-        access_token,
-        refresh_token,
+        userId: savedUser.id,
+        accessToken,
+        refreshToken,
       },
     });
   }
@@ -79,17 +79,17 @@ export class AuthRepo {
       });
     }
 
-    const payload = { sub: user.id, business_name: user.business_name };
-    const access_token = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
-    const refresh_token = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
+    const payload = { sub: user.id, businessName: user.businessName };
+    const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
+    const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
     console.log('login successful')
     return new ResponseInterface({
       message: 'Login Successful',
       status: 'success',
       data: {
-        user_id: user.id,
-        access_token,
-        refresh_token,
+        userId: user.id,
+        accessToken,
+        refreshToken,
       },
     });
   }
