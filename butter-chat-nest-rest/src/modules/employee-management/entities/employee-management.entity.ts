@@ -33,7 +33,7 @@ export class EmployeeManagement extends MetaData {
   email: string;
 
   @Column({ type: 'varchar', nullable: false })
-  password: string; // hashed before saving
+  password: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phoneNumber?: string;

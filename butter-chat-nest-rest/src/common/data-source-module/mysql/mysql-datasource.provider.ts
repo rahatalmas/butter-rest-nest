@@ -25,7 +25,7 @@ export const MysqlDatabaseProvider = [
                  ***Warning***
                  * Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
                 */
-                synchronize:true, //dev only
+                // synchronize:true, //dev only
                 extra:{
                     connectionLimit: 50,
                 },

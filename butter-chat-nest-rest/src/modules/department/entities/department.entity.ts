@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { MetaData } from "../../common/meta-data/meta-data";
+import { MetaData } from "../../../common/meta-data/meta-data";
 
 @Entity({ name: "department" })
-@Unique(['companyId', 'departmentName']) // composite unique constraint
-export class Department extends MetaData {
+@Unique(['companyId', 'departmentName'])
+export class Department extends MetaData{
 
   @PrimaryGeneratedColumn('uuid')
   id: string;
