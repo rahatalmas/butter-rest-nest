@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { EmployeeManagementService } from './employee-management.service';
+import { EmployeeManagementService } from './employee.service';
 import { CreateEmployeeManagementDto } from './dto/create-employee-management.dto';
 import { UpdateEmployeeManagementDto } from './dto/update-employee-management.dto';
 

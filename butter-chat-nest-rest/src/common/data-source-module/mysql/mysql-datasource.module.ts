@@ -3,6 +3,6 @@ import { MysqlDatabaseProvider } from "./mysql-datasource.provider";
 
 @Module({
     providers:[...MysqlDatabaseProvider],
-    exports:[...MysqlDatabaseProvider]
+    exports:[...MysqlDatabaseProvider],
 })
 export class MySqlDataBaseModule {}

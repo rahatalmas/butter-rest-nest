@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEmployeeManagementDto } from './dto/create-employee-management.dto';
 import { UpdateEmployeeManagementDto } from './dto/update-employee-management.dto';
-import { EmployeeManagementRepository } from './employee-management.repository';
+import { EmployeeManagementRepository } from './employee.repository';
 
 @Injectable()
 export class EmployeeManagementService {

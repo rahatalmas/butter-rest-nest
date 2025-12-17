@@ -1,0 +1,9 @@
+'AUTH_REPOSITORY'
+Registry
+
+'COMPANY_REPOSITORY'
+Company
+
+'EMPLOYEE_REPOSITORY'
+Employee
+
