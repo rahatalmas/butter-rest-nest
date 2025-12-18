@@ -34,14 +34,14 @@ export class AuthRepo {
     const hashedPassword = await bcrypt.hash(registerAuthDto.password, 10);
 
     const user = this.authRepository.create({
-      businessName: registerAuthDto.businessName,
+      business_name: registerAuthDto.business_name,
       email: registerAuthDto.email,
       password: hashedPassword,
     });
 
     const savedUser = await this.authRepository.save(user);
 
-    const payload = { sub: savedUser.id, businessName: savedUser.businessName };
+    const payload = { sub: savedUser.id, businessName: savedUser.business_name };
     const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
     const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
 
@@ -79,7 +79,7 @@ export class AuthRepo {
       });
     }
 
-    const payload = { sub: user.id, businessName: user.businessName };
+    const payload = { sub: user.id, businessName: user.business_name };
     const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
     const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
     console.log('login successful')

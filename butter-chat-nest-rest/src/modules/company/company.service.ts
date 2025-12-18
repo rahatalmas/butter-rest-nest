@@ -8,9 +8,9 @@ export class CompanyService {
 
   constructor(private readonly companyRepository:CompanyRepository){}
 
-  create(createCompanyDto: CreateCompanyDto) {
-    return this.companyRepository.create(createCompanyDto);
-  }
+  // create(createCompanyDto: CreateCompanyDto) {
+  //   return this.companyRepository.create(createCompanyDto);
+  // }
 
   findAll() {
     return this.companyRepository.findAll();

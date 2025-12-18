@@ -1,14 +1,13 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateCompanyDto {
-  @IsNotEmpty()
-  @IsUUID()
-  registry_id: string; // FK to Registry
-
+  @ApiProperty()
   @IsOptional()
   @IsString()
   about_company?: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   company_logo?: string;

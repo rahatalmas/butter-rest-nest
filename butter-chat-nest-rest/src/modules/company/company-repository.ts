@@ -15,23 +15,23 @@ export class CompanyRepository {
     private readonly companyRepository: Repository<Company>,
   ) {}
 
-  async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
-    const { registry_id, about_company, company_logo } = createCompanyDto;
+  // async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
+  //   const { registry_id, about_company, company_logo } = createCompanyDto;
 
-    // Fetch registry
-    const registry = await this.registryRepository.findOne({ where: { id: registry_id }});
-    if (!registry) {
-      throw new NotFoundException(`Registry with id ${registry_id} not found`);
-    }
+  //   // Fetch registry
+  //   const registry = await this.registryRepository.findOne({ where: { id: registry_id }});
+  //   if (!registry) {
+  //     throw new NotFoundException(`Registry with id ${registry_id} not found`);
+  //   }
 
-    const company = this.companyRepository.create({
-      registry,
-      about_company,
-      company_logo,
-    });
+  //   const company = this.companyRepository.create({
+  //     registry,
+  //     about_company,
+  //     company_logo,
+  //   });
 
-    return await this.companyRepository.save(company);
-  }
+  //   return await this.companyRepository.save(company);
+  // }
 
   async findAll(): Promise<Company[]> {
     return await this.companyRepository.find({

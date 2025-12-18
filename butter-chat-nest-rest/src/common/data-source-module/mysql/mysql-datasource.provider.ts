@@ -1,8 +1,9 @@
-import { join } from 'path';
 import {DataSource} from 'typeorm';
 import { Registry } from '../../../modules/auth/entities/registry.entity';
 import { Employee } from '../../../modules/employee-management/entities/employee.entity';
 import { Department } from '../../../modules/department/entities/department.entity';
+import { Company } from '../../../modules/company/entities/company.entity';
+import { join } from 'path';
 
 export const MysqlDatabaseProvider = [
     {
@@ -15,17 +16,17 @@ export const MysqlDatabaseProvider = [
                 username:'root',
                 password:'',
                 database:'butter_chat',
-                entities:[
-                    Registry,Department,Employee
-                ],
-                // entities: [
-                //     join(__dirname, '..', '..', '..', 'modules', '**', '*.entity.{ts,js}')
+                // entities:[
+                //     Registry,Company, Department,Employee
                 // ],
-                /*
-                 ***Warning***
-                 * Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
-                */
-                // synchronize:true, //dev only
+                    entities: [
+                        join(__dirname, '..', '..', '..', 'modules', '**', '*.entity.{ts,js}')
+                    ],
+                    /*
+                    ***Warning***
+                    * Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
+                    */
+                    synchronize:true, //dev only
                 extra:{
                     connectionLimit: 50,
                 },
