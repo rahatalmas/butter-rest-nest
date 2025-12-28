@@ -1,96 +1,112 @@
 import * as bcrypt from 'bcrypt';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { Inject } from '@nestjs/common';
-import { Registry } from './entities/registry.entity';
+import { company_status, Registry } from './entities/registry.entity';
 import { RegisterAuthDto } from './dto/registry-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
-import { ResponseInterface } from '../../common/interface/response-interface';
+import { v4 as uuidv4 } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthRepo {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject('AUTH_REPOSITORY')
+    @InjectRepository(Registry, 'MASTER_DB')
     private readonly authRepository: Repository<Registry>,
   ) {}
 
-  /**
-   * Register a new user
-  */
+  //company registration request ...
   async storeNewUser(registerAuthDto: RegisterAuthDto) {
-    const existingUser = await this.authRepository.findOne({
-      where: { email: registerAuthDto.email },
-    });
-
-    if (existingUser) {
-      return new ResponseInterface({
-        message: 'Email already registered',
-        status: 'error',
-      });
-    }
-
     const hashedPassword = await bcrypt.hash(registerAuthDto.password, 10);
 
+    const sanitizedName = registerAuthDto.company_name
+      .toLowerCase()
+      .replace(/\s+/g, '_') // replace spaces with _
+      .replace(/[^a-z0-9_]/g, ''); // remove special chars
+
+    const my_db_name = `butter_chat_${sanitizedName}_${uuidv4()}`;
+    console.log('Generated DB name:', my_db_name);
+    console.log("generated db name: ",my_db_name)
     const user = this.authRepository.create({
-      business_name: registerAuthDto.business_name,
+      company_name: registerAuthDto.company_name,
+      sub_domain: registerAuthDto.sub_domain,
       email: registerAuthDto.email,
       password: hashedPassword,
+      db_name:my_db_name
     });
 
-    const savedUser = await this.authRepository.save(user);
+    try{
+      const savedUser = await this.authRepository.save(user);
+      return {
+        status:'success',
+        companyName: savedUser.company_name,
+        message:"wait for admin approval",
+      };
+    }catch(err){
+      console.log(err)
+      throw new BadRequestException("invalid request")
+    }
 
-    const payload = { sub: savedUser.id, businessName: savedUser.business_name };
-    const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
-    const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
-
-    return new ResponseInterface({
-      message: 'Registration successful',
-      status: 'success',
-      data: {
-        userId: savedUser.id,
-        accessToken,
-        refreshToken,
-      },
-    });
   }
 
-  /**
-   * Login an existing user
-   */
+
+  //company login system...
   async login(loginAuthDto: LoginAuthDto) {
     const user = await this.authRepository.findOne({
       where: { email: loginAuthDto.email },
     });
 
     if (!user) {
-      return new ResponseInterface({
-        message: 'Invalid email or password',
-        status: 'error',
-      });
+      return { 
+        status: 'fail',
+        message: 'Invalid email' 
+      };
     }
 
-    const isPasswordValid = await bcrypt.compare(loginAuthDto.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      loginAuthDto.password,
+      user.password,
+    );
+
     if (!isPasswordValid) {
-      return new ResponseInterface({
-        message: 'Invalid email or password',
-        status: 'error',
-      });
+      return {
+         status: 'fail',
+         message: 'Invalid password'
+      };
     }
 
-    const payload = { sub: user.id, businessName: user.business_name };
-    const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '10m' });
-    const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '30d' });
-    console.log('login successful')
-    return new ResponseInterface({
-      message: 'Login Successful',
-      status: 'success',
-      data: {
+    if (user.status === company_status.PENDING) {
+      return {
+        status:'pending',
+        companyName: user.company_name,
+        message:"wait for admin approval",
+      };
+    }
+
+    const payload = { sub: user.id, businessName: user.company_name };
+
+    try{
+      const accessToken = await this.jwtService.signAsync(payload, {
+        expiresIn: '1d',
+      });
+
+      const refreshToken = await this.jwtService.signAsync(payload, {
+        expiresIn: '30d',
+      });
+
+      await this.authRepository.save(user);
+
+      return {
+        status:'success',
         userId: user.id,
         accessToken,
         refreshToken,
-      },
-    });
+      };
+    }catch(err){
+      throw new BadRequestException("invalid request")
+    }
+
   }
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { EmployeeManagementService } from './employee.service';
 import { EmployeeManagementController } from './employee.controller';
-import { MySqlDataBaseModule } from '../../common/data-source-module/mysql/mysql-datasource.module';
+import { MySqlDataBaseModule } from '../../data-source-module/master/master-datasource.module';
 import { EmployeeDbSourceProvider } from './employee.provider';
 import { EmployeeManagementRepository } from './employee.repository';
 

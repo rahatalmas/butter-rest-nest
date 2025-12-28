@@ -4,8 +4,9 @@ import { AuthController } from './auth.controller';
 import { AuthRepo } from './auth.repo';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
-import { MySqlDataBaseModule } from '../../common/data-source-module/mysql/mysql-datasource.module';
-import { AuthDbSourceProvider } from './auth.provider';
+import { MySqlDataBaseModule } from '../../data-source-module/master/master-datasource.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Registry } from './entities/registry.entity';
 
 @Module({
   imports:[
@@ -14,10 +15,11 @@ import { AuthDbSourceProvider } from './auth.provider';
         secret:jwtConstants.secret,
         //signOptions:{expiresIn:'1d'}
       }),
-      MySqlDataBaseModule
+      MySqlDataBaseModule,
+      TypeOrmModule.forFeature([Registry], 'MASTER_DB'),
   ],
   controllers: [AuthController],
-  providers: [...AuthDbSourceProvider,AuthService,AuthRepo],
-  exports:[...AuthDbSourceProvider]
+  providers: [AuthService,AuthRepo],
+  exports:[AuthService]
 })
 export class AuthModule {}

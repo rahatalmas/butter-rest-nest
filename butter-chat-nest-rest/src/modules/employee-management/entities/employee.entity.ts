@@ -18,6 +18,7 @@ export enum employee_status {
 export enum employee_shift {
   DAY = 'DAY',
   NIGHT = 'NIGHT',
+  PARTTIME = 'PARTTIME'
 }
 
 @Entity({ name: 'employee_management' })
@@ -53,10 +54,11 @@ export class Employee extends MetaData {
   @Column({ name: 'date_of_birth', type: 'date', nullable: true })
   date_of_birth?: string;
 
-  @Column({ name: 'joining_date', type: 'date' })
+  @Column({ name: 'joining_date', type: 'date', nullable:false })
   joining_date: string;
 
   @Column({
+    nullable:false,
     name: 'status',
     type: 'enum',
     enum: employee_status,
@@ -68,6 +70,7 @@ export class Employee extends MetaData {
     name: 'shift',
     type: 'enum',
     enum: employee_shift,
+    nullable:false
   })
   shift: employee_shift;
 

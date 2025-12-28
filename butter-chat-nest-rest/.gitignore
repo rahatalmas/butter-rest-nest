@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-
+/src/modules/social-media-auth
 # Logs
 logs
 *.log

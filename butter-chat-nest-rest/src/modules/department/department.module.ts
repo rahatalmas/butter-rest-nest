@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { DepartmentController } from './department.controller';
 import { DepartmentDbSourceProvider } from './department.provider';
-import { MySqlDataBaseModule } from '../../common/data-source-module/mysql/mysql-datasource.module';
+import { MySqlDataBaseModule } from '../../data-source-module/master/master-datasource.module';
 import { DepartmentRepository } from './department.repo';
                                                                                                                                                                                                                                                                                                                                                                                                             
 @Module({

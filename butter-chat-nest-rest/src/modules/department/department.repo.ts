@@ -1,39 +1,50 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { Department } from "./entities/department.entity";
-import { CreateDepartmentDto } from "./dto/create-department.dto";
-import { ResponseInterface } from "../../common/interface/response-interface";
+import { Inject, Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { Department } from './entities/department.entity';
+import { CreateDepartmentDto } from './dto/create-department.dto';
 
 @Injectable()
 export class DepartmentRepository {
   constructor(
     @Inject('DEPARTMENT_REPOSITORY')
-    private readonly departmentRepository: Repository<Department>
+    private readonly repo: Repository<Department>,
   ) {}
 
-  // Create a new department
-  async createDepartment(createDepartmentDto: CreateDepartmentDto) {
-    //   const department = this.departmentRepository.create({
-    //     company_id: createDepartmentDto.companyId,
-    //     departmentName: createDepartmentDto.departmentName,
-    //     departmntBio: createDepartmentDto.departmntBio,
-    //   });
+  /**
+   * Create a department with the company from JWT
+   * @param dto - CreateDepartmentDto
+   * @param companyId - obtained from JWT
+   */
+  async create(dto: CreateDepartmentDto, companyId: string): Promise<Department> {
+    const department = this.repo.create({
+      department_name: dto.department_name,
+      description: dto.description,
+      department_profile_uri: dto.department_profile_uri,
+      company: { id: companyId }, // FK via relation
+    });
 
-    //   const res = await this.departmentRepository.save(department);
-      return new ResponseInterface({ message: "Department created", data: {} });
+    return this.repo.save(department);
   }
 
+  async findAll(): Promise<Department[]> {
+    return this.repo.find({
+      relations: ['company'],
+    });
+  }
 
-  // Fetch all departments for a company
-  async getDepartmentsByCompanyId(companyId: string) {
-    // const res = await this.departmentRepository.find({
-    //   where: { companyId },
-    //   order: { createdDate: 'ASC' }, // assuming MetaData has createdAt
-    // });
+  async findByCompany(companyId: string): Promise<Department[]> {
+    return this.repo.find({
+      where: { company: { id: companyId } },
+      relations: ['company'],
+    });
+  }
 
-    return new ResponseInterface({
-      message: "Departments fetched successfully",
-      data: {},
+  async exists(companyId: string, department_name: string): Promise<boolean> {
+    return this.repo.exist({
+      where: {
+        company: { id: companyId },
+        department_name,
+      },
     });
   }
 }

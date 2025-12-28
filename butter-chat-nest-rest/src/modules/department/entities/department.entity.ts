@@ -13,15 +13,11 @@ import { Employee } from '../../employee-management/entities/employee.entity';
 import { Company } from '../../company/entities/company.entity';
 
 @Entity({ name: 'department' })
-@Unique(['company_id', 'department_name'])
-@Index('idx_department_company_id', ['company_id'])
+@Unique(['company', 'department_name']) //the relation
+@Index('idx_department_company', ['company']) //the relation, not company_id
 export class Department extends MetaData {
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({ name: 'company_id', type: 'uuid', nullable: false })
-  company_id: string;
 
   @Column({ name: 'department_name', type: 'varchar', length: 150 })
   department_name: string;
@@ -29,19 +25,19 @@ export class Department extends MetaData {
   @Column({ name: 'employee_count', type: 'int', default: 0 })
   employee_count: number;
 
-  @Column({ name: 'department_bio', type: 'text', nullable: true })
-  department_bio?: string;
+  @Column({ name: 'description', type: 'text', nullable: true })
+  description?: string;
 
   @Column({ name: 'department_profile_uri', type: 'text', nullable: true })
   department_profile_uri?: string;
 
-  @OneToMany(() => Employee, (employee) => employee.department)
-  employees: Employee[];
-
   @ManyToOne(() => Company, (company) => company.departments, {
     onDelete: 'CASCADE',
+    nullable: false,
   })
-  
-  @JoinColumn({ name: 'company_id' })
+  @JoinColumn({ name: 'company_id' }) // DB column stays company_id
   company: Company;
+
+  @OneToMany(() => Employee, (employee) => employee.department)
+  employees: Employee[];
 }

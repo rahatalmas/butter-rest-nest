@@ -1,15 +1,19 @@
 import { Module } from '@nestjs/common';
-import { CompanyService } from './company.service';
+//import { CompanyService } from './company.service';
 import { CompanyController } from './company.controller';
-import { CompanyRepository } from './company-repository';
 import { CompanyDbSourceProvider } from './company-provider';
 import { AuthModule } from '../auth/auth.module';
-import { MySqlDataBaseModule } from '../../common/data-source-module/mysql/mysql-datasource.module';
-
+import { MySqlDataBaseModule } from '../../data-source-module/master/master-datasource.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Company } from './entities/company.entity';
+import { Registry } from '../auth/entities/registry.entity';
+import { TenantModule } from '../../data-source-module/tanents/tenant.module';
 @Module({
-  imports:[AuthModule,MySqlDataBaseModule],
+  imports:[
+    AuthModule,TenantModule,MySqlDataBaseModule,
+  ],
   controllers: [CompanyController],
-  providers: [...CompanyDbSourceProvider,CompanyService,CompanyRepository],
-  exports:[...CompanyDbSourceProvider]
+  //providers: [CompanyService],
+  exports:[]
 })
 export class CompanyModule {}
