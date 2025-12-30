@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 //import { CompanyService } from './company.service';
 import { CompanyController } from './company.controller';
-import { CompanyDbSourceProvider } from './company-provider';
 import { AuthModule } from '../auth/auth.module';
 import { MySqlDataBaseModule } from '../../data-source-module/master/master-datasource.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
