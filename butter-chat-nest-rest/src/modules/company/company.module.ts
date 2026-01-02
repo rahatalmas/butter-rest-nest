@@ -7,12 +7,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { Registry } from '../auth/entities/registry.entity';
 import { TenantModule } from '../../data-source-module/tanents/tenant.module';
+import { CompanyService } from './company.service';
+import { CompanyRepository } from './company-repository';
 @Module({
   imports:[
-    AuthModule,TenantModule,MySqlDataBaseModule,
+    AuthModule,TenantModule,
   ],
   controllers: [CompanyController],
-  //providers: [CompanyService],
+  providers: [CompanyService,CompanyRepository],
   exports:[]
 })
 export class CompanyModule {}

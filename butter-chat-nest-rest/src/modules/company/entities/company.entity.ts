@@ -7,7 +7,7 @@ import { Role } from '../../role/entities/role.entity';
 @Entity({ name: 'company' })
 export class Company extends MetaData {
 
-  @PrimaryColumn('uuid')
+  @PrimaryColumn('uuid',{unique: true})
   id: string;
 
   @Column({ name: 'admin_name', type: 'text', nullable: false })

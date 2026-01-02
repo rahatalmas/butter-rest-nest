@@ -1,34 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { EmployeeManagementService } from './employee.service';
 import { CreateEmployeeManagementDto } from './dto/create-employee-management.dto';
 import { UpdateEmployeeManagementDto } from './dto/update-employee-management.dto';
+import { TenantGuard } from '../../data-source-module/tanents/tanant.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
 
-@Controller('employee-management')
+@ApiTags('employee management')
+@ApiBearerAuth()
+@UseGuards(AuthGuard,TenantGuard)
+@Controller('employee')
 export class EmployeeManagementController {
-  constructor(private readonly employeeManagementService: EmployeeManagementService) {}
+  //constructor(private readonly employeeManagementService: EmployeeManagementService) {}
 
   @Post('add')
   create(@Body() createEmployeeManagementDto: CreateEmployeeManagementDto) {
-    return this.employeeManagementService.create(createEmployeeManagementDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.employeeManagementService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.employeeManagementService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeManagementDto: UpdateEmployeeManagementDto) {
-    return this.employeeManagementService.update(+id, updateEmployeeManagementDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.employeeManagementService.remove(+id);
+    return 'add employee'
   }
 }

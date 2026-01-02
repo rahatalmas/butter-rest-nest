@@ -19,8 +19,8 @@ import { TenantGuard } from './data-source-module/tanents/tanant.guard';
     GoogleAuthModule,
     CompanyModule,
     // RoleModule,
-    // DepartmentModule, 
-    // EmployeeManagementModule
+    DepartmentModule, 
+    EmployeeManagementModule
   ],
   controllers: [AppController],
   providers: [

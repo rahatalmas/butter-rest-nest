@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-//import { CompanyService } from './company.service';
+import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -20,7 +20,7 @@ import { TenantGuard } from '../../data-source-module/tanents/tanant.guard';
 @UseGuards(AuthGuard,TenantGuard)
 @Controller('company')
 export class CompanyController {
-  //constructor(private readonly companyService: CompanyService) {}
+  constructor(private readonly companyService: CompanyService) {}
 
   //controller for creating a new department...
   @ApiOperation({ summary: 'Create company profile' })
@@ -32,11 +32,11 @@ export class CompanyController {
     console.log("request.user: ",req.user)
     const registryId = req.user['sub'];
     const tenantDb = req.tenantDb;
-    return {registryId,tenantDb}
-    // return this.companyService.createCompany(
-    //   createCompanyDto,
-    //   registryId,
-    // );
+    return this.companyService.createCompany(
+      createCompanyDto,
+      registryId,
+      tenantDb
+    );
   }
 
   //for getting company profile data...
@@ -47,8 +47,7 @@ export class CompanyController {
     const registryId = req.user['sub'];
     const db = req.tenantDb;
     console.log(db.options)
-    return {registryId}
-    //return this.companyService.findByRegistryId(registryId);
+    return this.companyService.findByRegistryId(registryId);
   }
 
   @ApiOperation({ summary: 'Update company profile' })

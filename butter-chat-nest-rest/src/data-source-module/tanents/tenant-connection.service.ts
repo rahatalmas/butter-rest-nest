@@ -1,5 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { DataSource } from "typeorm";
+import { Company } from "../../modules/company/entities/company.entity";
+import { Department } from "../../modules/department/entities/department.entity";
+import { Employee } from "../../modules/employee-management/entities/employee.entity";
+import { Role } from "../../modules/role/entities/role.entity";
 
 @Injectable()
 export class TenantConnectionService {
@@ -18,12 +22,14 @@ export class TenantConnectionService {
       username: 'root',
       password: '',
       database: dbName,
-      entities: [],
-      synchronize: false,
+      entities: [Company,Department,Employee,Role],
+      //migrations:['dist/migrations/*.js'],
+      synchronize: true,
     });
 
     await ds.initialize();
+    //await ds.runMigrations();
     this.connections.set(dbName, ds);
     return ds;
-  }
+  }               
 }
